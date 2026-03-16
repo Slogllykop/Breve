@@ -2,9 +2,9 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 
 export async function GET(request: Request) {
-    const { searchParams, origin } = new URL(request.url);
-    const code = searchParams.get("code");
-    const next = searchParams.get("next") ?? "/";
+    const requestUrl = new URL(request.url);
+    const code = requestUrl.searchParams.get("code");
+    const next = requestUrl.searchParams.get("next") ?? "/";
 
     if (code) {
         const supabase = await createClient();
@@ -17,22 +17,22 @@ export async function GET(request: Request) {
 
             if (user?.email) {
                 const { data: isWhitelisted } = await supabase.rpc(
-                    "check_whitelist",
+                    "check_email_whitelisted",
                     { p_email: user.email },
                 );
 
                 if (!isWhitelisted) {
                     await supabase.auth.signOut();
                     return NextResponse.redirect(
-                        `${origin}/?error=unauthorized`,
+                        new URL("/?error=unauthorized", requestUrl.origin),
                     );
                 }
             }
 
-            return NextResponse.redirect(`${origin}${next}`);
+            return NextResponse.redirect(new URL(next, requestUrl.origin));
         }
     }
 
     // Return the user to the home page with an error
-    return NextResponse.redirect(`${origin}/?error=auth`);
+    return NextResponse.redirect(new URL("/?error=auth", requestUrl.origin));
 }
