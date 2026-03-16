@@ -55,7 +55,8 @@ export function CountryChart({ data }: { data: CountryData[] }) {
             <BarChart
                 data={sortedData}
                 layout="vertical"
-                margin={{ top: 0, right: 35, left: 0, bottom: 0 }}
+                margin={{ top: 5, right: 45, left: 10, bottom: 5 }}
+                className="outline-0"
             >
                 <CartesianGrid
                     strokeDasharray="3 3"
@@ -72,7 +73,8 @@ export function CountryChart({ data }: { data: CountryData[] }) {
                     tickLine={false}
                     className="fill-muted-foreground font-medium"
                     fontSize={12}
-                    width={92}
+                    width={180}
+                    interval={0}
                 />
                 <ChartTooltip
                     cursor={{ fill: "hsl(var(--muted) / 0.15)" }}

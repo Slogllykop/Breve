@@ -136,3 +136,7 @@
         --chart-5: oklch(0.645 0.246 16.439);
     }
 }
+
+g[class^="recharts-zIndex"] {
+    outline: none;
+}
