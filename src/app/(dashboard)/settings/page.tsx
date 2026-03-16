@@ -1,3 +1,5 @@
+import { IconArrowLeft } from "@tabler/icons-react";
+import Link from "next/link";
 import { getWhitelistedEmails } from "@/app/(dashboard)/settings/actions";
 import { LoginForm } from "@/components/auth/login-form";
 import { Header } from "@/components/dashboard/header";
@@ -29,6 +31,13 @@ export default async function SettingsPage() {
             <Header email={user.email ?? ""} />
             <main className="mx-auto w-full max-w-5xl flex-1 p-4 md:p-8">
                 <div className="mb-8">
+                    <Link
+                        href="/"
+                        className="mb-4 inline-flex items-center text-sm text-zinc-500 hover:text-zinc-300"
+                    >
+                        <IconArrowLeft className="mr-1 size-4" />
+                        Back to links
+                    </Link>
                     <h1 className="mb-2 font-bold text-3xl text-white tracking-tight">
                         Settings
                     </h1>

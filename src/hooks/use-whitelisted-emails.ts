@@ -9,7 +9,7 @@ import {
 } from "@/app/(dashboard)/settings/actions";
 
 export function useWhitelistedEmails(
-    initialEmails: { email: string; added_at: string; added_by: string }[],
+    initialEmails: { email: string; created_at: string }[],
 ) {
     const [emails, setEmails] = useState(initialEmails);
     const [isPending, startTransition] = useTransition();

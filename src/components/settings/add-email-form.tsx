@@ -9,7 +9,7 @@ import { useWhitelistedEmails } from "@/hooks/use-whitelisted-emails";
 export function AddEmailForm({
     emails,
 }: {
-    emails: { email: string; added_at: string; added_by: string }[];
+    emails: { email: string; created_at: string }[];
 }) {
     const { addEmail, isPending } = useWhitelistedEmails(emails);
     const [newEmail, setNewEmail] = useState("");

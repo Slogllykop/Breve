@@ -1,16 +1,23 @@
 "use client";
 
 import { IconTrash } from "@tabler/icons-react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useWhitelistedEmails } from "@/hooks/use-whitelisted-emails";
+import { formatDate } from "@/lib/utils";
 
 export function EmailList({
     initialEmails,
 }: {
-    initialEmails: { email: string; added_at: string; added_by: string }[];
+    initialEmails: { email: string; created_at: string }[];
 }) {
     const { emails, removeEmail, isPending } =
         useWhitelistedEmails(initialEmails);
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     return (
         <div className="overflow-hidden rounded-md border border-zinc-800 bg-black">
@@ -30,10 +37,10 @@ export function EmailList({
                                     {email.email}
                                 </span>
                                 <span className="text-xs text-zinc-500">
-                                    Added on{" "}
-                                    {new Date(
-                                        email.added_at,
-                                    ).toLocaleDateString()}
+                                    Added{" "}
+                                    {mounted
+                                        ? formatDate(email.created_at)
+                                        : "..."}
                                 </span>
                             </div>
                             <Button
