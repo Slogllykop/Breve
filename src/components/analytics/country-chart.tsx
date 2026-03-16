@@ -4,6 +4,7 @@ import {
     Bar,
     BarChart,
     CartesianGrid,
+    Cell,
     LabelList,
     XAxis,
     YAxis,
@@ -28,12 +29,25 @@ export function CountryChart({ data }: { data: CountryData[] }) {
         .sort((a, b) => b.clicks - a.clicks)
         .slice(0, 10);
 
+    const BAR_COLORS = [
+        "#10b981", // Emerald
+        "#f59e0b", // Amber
+        "#f43f5e", // Rose
+        "#8b5cf6", // Violet
+        "#f97316", // Orange
+        "#06b6d4", // Cyan (switching to cyan/teal as it's distinct from forbidden 'blue')
+        "#ec4899", // Pink
+        "#84cc16", // Lime
+        "#d946ef", // Fuchsia
+        "#6366f1", // Indigo
+    ];
+
     return (
         <ChartContainer
             config={{
                 clicks: {
                     label: "Clicks",
-                    color: "rgba(255,255,255,0.88)",
+                    color: "#10b981",
                 },
             }}
             className="aspect-auto h-[320px] w-full"
@@ -41,7 +55,7 @@ export function CountryChart({ data }: { data: CountryData[] }) {
             <BarChart
                 data={sortedData}
                 layout="vertical"
-                margin={{ top: 0, right: 12, left: 0, bottom: 0 }}
+                margin={{ top: 0, right: 35, left: 0, bottom: 0 }}
             >
                 <CartesianGrid
                     strokeDasharray="3 3"
@@ -61,7 +75,7 @@ export function CountryChart({ data }: { data: CountryData[] }) {
                     width={92}
                 />
                 <ChartTooltip
-                    cursor={{ fill: "hsl(var(--muted) / 0.35)" }}
+                    cursor={{ fill: "hsl(var(--muted) / 0.15)" }}
                     content={
                         <ChartTooltipContent
                             labelFormatter={(label: string) =>
@@ -70,16 +84,18 @@ export function CountryChart({ data }: { data: CountryData[] }) {
                         />
                     }
                 />
-                <Bar
-                    dataKey="clicks"
-                    fill="var(--color-clicks)"
-                    radius={[0, 4, 4, 0]}
-                    barSize={24}
-                >
+                <Bar dataKey="clicks" radius={[0, 4, 4, 0]} barSize={20}>
+                    {sortedData.map((entry, index) => (
+                        <Cell
+                            key={`bar-${entry.country}`}
+                            fill={BAR_COLORS[index % BAR_COLORS.length]}
+                        />
+                    ))}
                     <LabelList
                         dataKey="clicks"
                         position="right"
-                        className="fill-foreground font-mono text-xs"
+                        className="fill-foreground/80 font-mono text-xs"
+                        offset={10}
                     />
                 </Bar>
             </BarChart>

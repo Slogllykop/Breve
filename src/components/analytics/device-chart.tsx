@@ -11,10 +11,10 @@ import {
 } from "@/components/ui/chart";
 
 const COLORS = {
-    desktop: "rgba(255,255,255,0.92)",
-    mobile: "rgba(255,255,255,0.72)",
-    tablet: "rgba(255,255,255,0.54)",
-    unknown: "rgba(255,255,255,0.3)",
+    desktop: "#10b981", // Emerald
+    mobile: "#f59e0b", // Amber
+    tablet: "#8b5cf6", // Violet
+    unknown: "#f43f5e", // Rose
 };
 
 export function DeviceChart({ data }: { data: DeviceData[] }) {

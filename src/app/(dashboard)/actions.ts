@@ -33,6 +33,26 @@ export async function sendOtp(
 ): Promise<AuthResult> {
     const supabase = await createClient();
 
+    // Check if the email is whitelisted before sending OTP
+    const { data: isWhitelisted, error: checkError } = await supabase.rpc(
+        "check_email_whitelisted",
+        { p_email: email },
+    );
+
+    if (checkError) {
+        return {
+            success: false,
+            error: "Unable to verify email. Please try again.",
+        };
+    }
+
+    if (!isWhitelisted) {
+        return {
+            success: false,
+            error: "This email is not authorized.",
+        };
+    }
+
     const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {

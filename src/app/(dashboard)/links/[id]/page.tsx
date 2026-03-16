@@ -1,4 +1,5 @@
 import { IconArrowLeft } from "@tabler/icons-react";
+import { headers } from "next/headers";
 import Link from "next/link";
 import { AnalyticsView } from "@/components/analytics/analytics-view";
 import { Header } from "@/components/dashboard/header";
@@ -56,6 +57,12 @@ export default async function AnalyticsPage({
         (await getCachedClickCount(linkId)) ?? 0,
     );
 
+    // Derive base URL from request headers
+    const headersList = await headers();
+    const host = headersList.get("host") ?? "localhost:3000";
+    const protocol = headersList.get("x-forwarded-proto") ?? "http";
+    const baseUrl = `${protocol}://${host}`;
+
     return (
         <div className="min-h-screen">
             <Header email={user.email ?? ""} />
@@ -71,7 +78,7 @@ export default async function AnalyticsPage({
                             Back to links
                         </Link>
                         <h2 className="font-semibold text-2xl tracking-tight">
-                            /{link.slug} Analytics
+                            {link.title}
                         </h2>
                         <a
                             href={link.original_url}
@@ -84,7 +91,20 @@ export default async function AnalyticsPage({
                     </div>
                 </div>
 
-                <AnalyticsView linkId={linkId} totalClicks={totalClicks} />
+                <AnalyticsView
+                    linkId={linkId}
+                    totalClicks={totalClicks}
+                    link={{
+                        id: link.id,
+                        slug: link.slug,
+                        original_url: link.original_url,
+                        title: link.title,
+                        created_at: link.created_at,
+                        updated_at: link.updated_at,
+                        click_count: totalClicks,
+                    }}
+                    baseUrl={baseUrl}
+                />
             </main>
         </div>
     );

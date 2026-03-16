@@ -29,7 +29,7 @@ export function ClickChart({ data }: { data: TimeSeriesData[] }) {
             config={{
                 clicks: {
                     label: "Clicks",
-                    color: "rgba(255,255,255,0.88)",
+                    color: "#10b981",
                 },
             }}
             className="aspect-auto h-[320px] w-full"
