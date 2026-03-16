@@ -1,6 +1,13 @@
 "use client";
 
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
+import {
+    Area,
+    AreaChart,
+    CartesianGrid,
+    ReferenceLine,
+    XAxis,
+    YAxis,
+} from "recharts";
 import type { TimeSeriesData } from "@/app/(dashboard)/links/[id]/actions";
 import {
     ChartContainer,
@@ -11,7 +18,7 @@ import {
 export function ClickChart({ data }: { data: TimeSeriesData[] }) {
     if (!data || data.length === 0) {
         return (
-            <div className="flex h-[300px] w-full items-center justify-center text-muted-foreground text-sm">
+            <div className="flex h-[320px] w-full items-center justify-center text-muted-foreground text-sm">
                 No click data available for this period.
             </div>
         );
@@ -22,20 +29,20 @@ export function ClickChart({ data }: { data: TimeSeriesData[] }) {
             config={{
                 clicks: {
                     label: "Clicks",
-                    color: "hsl(var(--primary))",
+                    color: "rgba(255,255,255,0.88)",
                 },
             }}
-            className="h-[300px] w-full"
+            className="aspect-auto h-[320px] w-full"
         >
-            <BarChart
+            <AreaChart
                 data={data}
-                margin={{ top: 20, right: 0, left: -20, bottom: 0 }}
+                margin={{ top: 20, right: 8, left: 0, bottom: 0 }}
             >
                 <CartesianGrid
                     strokeDasharray="3 3"
                     vertical={false}
                     stroke="hsl(var(--border))"
-                    opacity={0.5}
+                    opacity={0.35}
                 />
                 <XAxis
                     dataKey="date"
@@ -53,23 +60,38 @@ export function ClickChart({ data }: { data: TimeSeriesData[] }) {
                     className="fill-muted-foreground"
                 />
                 <YAxis
+                    allowDecimals={false}
                     tickLine={false}
                     axisLine={false}
+                    width={34}
                     fontSize={12}
                     tickFormatter={(value) => `${value}`}
                     className="fill-muted-foreground"
                 />
+                <ReferenceLine y={0} stroke="hsl(var(--border))" />
                 <ChartTooltip
-                    cursor={{ fill: "hsl(var(--muted) / 0.5)" }}
-                    content={<ChartTooltipContent />}
+                    cursor={false}
+                    content={
+                        <ChartTooltipContent
+                            labelFormatter={(label: string) =>
+                                new Date(label).toLocaleDateString("en-US", {
+                                    weekday: "short",
+                                    month: "short",
+                                    day: "numeric",
+                                })
+                            }
+                        />
+                    }
                 />
-                <Bar
+                <Area
+                    type="monotone"
                     dataKey="clicks"
                     fill="var(--color-clicks)"
-                    radius={[4, 4, 0, 0]}
-                    maxBarSize={40}
+                    fillOpacity={0.2}
+                    stroke="var(--color-clicks)"
+                    strokeWidth={2.5}
                 />
-            </BarChart>
+            </AreaChart>
         </ChartContainer>
     );
 }

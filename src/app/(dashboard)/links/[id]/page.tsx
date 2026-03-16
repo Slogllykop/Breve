@@ -51,7 +51,10 @@ export default async function AnalyticsPage({
     }
 
     const link = links[0];
-    const totalClicks = (await getCachedClickCount(linkId)) ?? 0;
+    const totalClicks = Math.max(
+        Number(link.click_count ?? 0),
+        (await getCachedClickCount(linkId)) ?? 0,
+    );
 
     return (
         <div className="min-h-screen">

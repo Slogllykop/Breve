@@ -1,6 +1,6 @@
 "use client";
 
-import { IconLoader2 } from "@tabler/icons-react";
+import { IconLoader2, IconRefresh } from "@tabler/icons-react";
 import { useCallback, useState, useTransition } from "react";
 import { toast } from "sonner";
 import type { LinkData } from "@/app/(dashboard)/actions";
@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { isValidSlug } from "@/lib/slug";
+import { generateSlug, isValidSlug } from "@/lib/slug";
 
 type EditLinkDialogProps = {
     link: LinkData;
@@ -34,6 +34,10 @@ export function EditLinkDialog({
     const [title, setTitle] = useState(link.title ?? "");
     const [error, setError] = useState<string | null>(null);
     const [isPending, startTransition] = useTransition();
+
+    const handleRandomize = useCallback(() => {
+        setSlug(generateSlug());
+    }, []);
 
     const handleSubmit = useCallback(() => {
         setError(null);
@@ -106,14 +110,25 @@ export function EditLinkDialog({
 
                     <div className="flex flex-col gap-2">
                         <Label htmlFor="edit-slug">Slug</Label>
-                        <Input
-                            id="edit-slug"
-                            type="text"
-                            value={slug}
-                            onChange={(e) => setSlug(e.target.value)}
-                            disabled={isPending}
-                            required
-                        />
+                        <div className="flex gap-2">
+                            <Input
+                                id="edit-slug"
+                                type="text"
+                                value={slug}
+                                onChange={(e) => setSlug(e.target.value)}
+                                disabled={isPending}
+                                required
+                            />
+                            <Button
+                                type="button"
+                                variant="outline"
+                                size="icon"
+                                onClick={handleRandomize}
+                                disabled={isPending}
+                            >
+                                <IconRefresh />
+                            </Button>
+                        </div>
                     </div>
 
                     <div className="flex flex-col gap-2">
