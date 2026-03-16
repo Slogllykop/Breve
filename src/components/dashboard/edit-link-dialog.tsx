@@ -16,6 +16,12 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { generateSlug, isValidSlug } from "@/lib/slug";
 
 type EditLinkDialogProps = {
@@ -119,15 +125,26 @@ export function EditLinkDialog({
                                 disabled={isPending}
                                 required
                             />
-                            <Button
-                                type="button"
-                                variant="outline"
-                                size="icon"
-                                onClick={handleRandomize}
-                                disabled={isPending}
-                            >
-                                <IconRefresh />
-                            </Button>
+                            <TooltipProvider>
+                                <Tooltip>
+                                    <TooltipTrigger
+                                        render={
+                                            <Button
+                                                type="button"
+                                                variant="outline"
+                                                size="icon"
+                                                onClick={handleRandomize}
+                                                disabled={isPending}
+                                            >
+                                                <IconRefresh />
+                                            </Button>
+                                        }
+                                    />
+                                    <TooltipContent>
+                                        Generate random slug
+                                    </TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
                         </div>
                     </div>
 

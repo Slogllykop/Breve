@@ -5,6 +5,12 @@ import Fuse from "fuse.js";
 import { useDeferredValue, useState } from "react";
 import type { LinkData } from "@/app/(dashboard)/actions";
 import { Input } from "@/components/ui/input";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { LinkCard } from "./link-card";
 
 type LinkListProps = {
@@ -54,15 +60,24 @@ export function LinkList({ links, baseUrl }: LinkListProps) {
                             placeholder="Search by slug, title, or destination URL"
                             className="h-11 rounded-2xl border-white/12 bg-black/24 pl-10 text-white placeholder:text-white/40"
                         />
-                        {query ? (
-                            <button
-                                type="button"
-                                onClick={() => setQuery("")}
-                                className="-translate-y-1/2 absolute top-1/2 right-3 inline-flex size-7 items-center justify-center rounded-full text-white/48 transition-colors hover:bg-white/8 hover:text-white"
-                            >
-                                <IconX className="size-4" />
-                            </button>
-                        ) : null}
+                        <TooltipProvider>
+                            {query ? (
+                                <Tooltip>
+                                    <TooltipTrigger
+                                        render={
+                                            <button
+                                                type="button"
+                                                onClick={() => setQuery("")}
+                                                className="-translate-y-1/2 absolute top-1/2 right-3 inline-flex size-7 items-center justify-center rounded-full text-white/48 transition-colors hover:bg-white/8 hover:text-white"
+                                            >
+                                                <IconX className="size-4" />
+                                            </button>
+                                        }
+                                    />
+                                    <TooltipContent>Clear search</TooltipContent>
+                                </Tooltip>
+                            ) : null}
+                        </TooltipProvider>
                     </div>
 
                     <div className="flex items-center gap-2 rounded-2xl border border-white/10 bg-black/24 px-3 py-2 text-white/64 text-xs">

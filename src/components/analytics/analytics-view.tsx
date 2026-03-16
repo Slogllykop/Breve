@@ -117,64 +117,77 @@ export function AnalyticsView({
                 {/* Action Bar */}
                 <Card className="border border-white/10 bg-white/4 py-0">
                     <CardContent className="flex flex-col gap-5 p-5 sm:p-6">
-                        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-                            <div className="flex items-center gap-4">
-                                <button
-                                    type="button"
-                                    onClick={() => setQrOpen(true)}
-                                    className="group/qr relative shrink-0 cursor-pointer rounded-xl border border-white/10 bg-white p-0 shadow-[0_22px_40px_rgba(0,0,0,0.24)] transition-transform duration-200 hover:scale-105"
-                                >
-                                    <QrCode
-                                        ref={qrRef}
-                                        url={shortUrl}
-                                        size={64}
-                                        className="rounded-2xl"
-                                    />
-                                    <div className="pointer-events-none absolute inset-0 flex items-center justify-center rounded-xl bg-black/50 opacity-0 transition-opacity group-hover/qr:opacity-100">
-                                        <IconBarcode className="size-4 text-white" />
+                        <TooltipProvider>
+                            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                                <div className="flex items-center gap-4">
+                                    <Tooltip>
+                                        <TooltipTrigger
+                                            render={
+                                                <button
+                                                    type="button"
+                                                    onClick={() =>
+                                                        setQrOpen(true)
+                                                    }
+                                                    className="group/qr relative shrink-0 cursor-pointer rounded-xl border border-white/10 bg-white p-0 shadow-[0_22px_40px_rgba(0,0,0,0.24)] transition-transform duration-200 hover:scale-105"
+                                                >
+                                                    <QrCode
+                                                        ref={qrRef}
+                                                        url={shortUrl}
+                                                        size={64}
+                                                        className="rounded-2xl"
+                                                    />
+                                                    <div className="pointer-events-none absolute inset-0 flex items-center justify-center rounded-xl bg-black/50 opacity-0 transition-opacity group-hover/qr:opacity-100">
+                                                        <IconBarcode className="size-4 text-white" />
+                                                    </div>
+                                                </button>
+                                            }
+                                        />
+                                        <TooltipContent>
+                                            View QR code
+                                        </TooltipContent>
+                                    </Tooltip>
+                                    <div className="min-w-0">
+                                        <h3 className="font-semibold text-2xl text-white tracking-tight">
+                                            Analytics Overview
+                                        </h3>
+                                        <p className="mt-0.5 truncate text-sm text-white/56">
+                                            {shortUrl}
+                                        </p>
                                     </div>
-                                </button>
-                                <div className="min-w-0">
-                                    <h3 className="font-semibold text-2xl text-white tracking-tight">
-                                        Analytics Overview
-                                    </h3>
-                                    <p className="mt-0.5 truncate text-sm text-white/56">
-                                        {shortUrl}
-                                    </p>
+                                </div>
+
+                                <div className="flex items-center gap-3">
+                                    <Tabs
+                                        value={period}
+                                        onValueChange={(value) =>
+                                            setPeriod(value as Period)
+                                        }
+                                        className="w-full sm:w-[320px]"
+                                    >
+                                        <TabsList className="grid w-full grid-cols-4 bg-black/28">
+                                            <TabsTrigger value="7d">
+                                                7D
+                                            </TabsTrigger>
+                                            <TabsTrigger value="30d">
+                                                30D
+                                            </TabsTrigger>
+                                            <TabsTrigger value="90d">
+                                                90D
+                                            </TabsTrigger>
+                                            <TabsTrigger value="all">
+                                                All
+                                            </TabsTrigger>
+                                        </TabsList>
+                                    </Tabs>
+
+                                    {isLoading ? (
+                                        <IconLoader2 className="size-5 animate-spin text-white/56" />
+                                    ) : null}
                                 </div>
                             </div>
 
-                            <div className="flex items-center gap-3">
-                                <Tabs
-                                    value={period}
-                                    onValueChange={(value) =>
-                                        setPeriod(value as Period)
-                                    }
-                                    className="w-full sm:w-[320px]"
-                                >
-                                    <TabsList className="grid w-full grid-cols-4 bg-black/28">
-                                        <TabsTrigger value="7d">7D</TabsTrigger>
-                                        <TabsTrigger value="30d">
-                                            30D
-                                        </TabsTrigger>
-                                        <TabsTrigger value="90d">
-                                            90D
-                                        </TabsTrigger>
-                                        <TabsTrigger value="all">
-                                            All
-                                        </TabsTrigger>
-                                    </TabsList>
-                                </Tabs>
-
-                                {isLoading ? (
-                                    <IconLoader2 className="size-5 animate-spin text-white/56" />
-                                ) : null}
-                            </div>
-                        </div>
-
-                        {/* Action Buttons */}
-                        <div className="flex flex-wrap items-center gap-2 border-white/8 border-t pt-4">
-                            <TooltipProvider>
+                            {/* Action Buttons */}
+                            <div className="flex flex-wrap items-center gap-2 border-white/8 border-t pt-4">
                                 <Tooltip>
                                     <TooltipTrigger
                                         render={
@@ -201,56 +214,96 @@ export function AnalyticsView({
                                         Copy the short link
                                     </TooltipContent>
                                 </Tooltip>
-                            </TooltipProvider>
 
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                className="border-white/12 bg-white/4 text-white hover:bg-white/8"
-                                onClick={downloadQrCode}
-                            >
-                                <IconDownload data-icon="inline-start" />
-                                Download QR
-                            </Button>
+                                <Tooltip>
+                                    <TooltipTrigger
+                                        render={
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                className="border-white/12 bg-white/4 text-white hover:bg-white/8"
+                                                onClick={downloadQrCode}
+                                            >
+                                                <IconDownload data-icon="inline-start" />
+                                                Download QR
+                                            </Button>
+                                        }
+                                    />
+                                    <TooltipContent>
+                                        Download QR code
+                                    </TooltipContent>
+                                </Tooltip>
 
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                className="border-white/12 bg-white/4 text-white hover:bg-white/8"
-                                nativeButton={false}
-                                render={
-                                    <a
-                                        href={shortUrl}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
-                                        <IconExternalLink data-icon="inline-start" />
-                                        Open short link
-                                    </a>
-                                }
-                            />
+                                <Tooltip>
+                                    <TooltipTrigger
+                                        render={
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                className="border-white/12 bg-white/4 text-white hover:bg-white/8"
+                                                nativeButton={false}
+                                                render={
+                                                    <a
+                                                        href={shortUrl}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                    >
+                                                        <IconExternalLink data-icon="inline-start" />
+                                                        Open short link
+                                                    </a>
+                                                }
+                                            />
+                                        }
+                                    />
+                                    <TooltipContent>
+                                        Open link in new tab
+                                    </TooltipContent>
+                                </Tooltip>
 
-                            <div className="ml-auto flex items-center gap-2">
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    className="border-white/12 bg-white/4 text-white hover:bg-white/8"
-                                    onClick={() => setEditOpen(true)}
-                                >
-                                    <IconPencil data-icon="inline-start" />
-                                    Edit
-                                </Button>
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    className="border-red-500/30 bg-red-500/10 text-red-400 hover:bg-red-500/20 hover:text-red-300"
-                                    onClick={() => setDeleteOpen(true)}
-                                >
-                                    <IconTrash data-icon="inline-start" />
-                                    Delete
-                                </Button>
+                                <div className="ml-auto flex items-center gap-2">
+                                    <Tooltip>
+                                        <TooltipTrigger
+                                            render={
+                                                <Button
+                                                    variant="outline"
+                                                    size="sm"
+                                                    className="border-white/12 bg-white/4 text-white hover:bg-white/8"
+                                                    onClick={() =>
+                                                        setEditOpen(true)
+                                                    }
+                                                >
+                                                    <IconPencil data-icon="inline-start" />
+                                                    Edit
+                                                </Button>
+                                            }
+                                        />
+                                        <TooltipContent>
+                                            Edit link
+                                        </TooltipContent>
+                                    </Tooltip>
+                                    <Tooltip>
+                                        <TooltipTrigger
+                                            render={
+                                                <Button
+                                                    variant="outline"
+                                                    size="sm"
+                                                    className="border-red-500/30 bg-red-500/10 text-red-400 hover:bg-red-500/20 hover:text-red-300"
+                                                    onClick={() =>
+                                                        setDeleteOpen(true)
+                                                    }
+                                                >
+                                                    <IconTrash data-icon="inline-start" />
+                                                    Delete
+                                                </Button>
+                                            }
+                                        />
+                                        <TooltipContent>
+                                            Delete link
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </div>
                             </div>
-                        </div>
+                        </TooltipProvider>
                     </CardContent>
                 </Card>
 

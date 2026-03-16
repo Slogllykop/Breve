@@ -16,6 +16,12 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { generateSlug, isValidSlug } from "@/lib/slug";
 
 export function CreateLinkDialog() {
@@ -72,101 +78,119 @@ export function CreateLinkDialog() {
     }, [url, slug, title]);
 
     return (
-        <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger
-                render={
-                    <Button>
-                        <IconPlus data-icon="inline-start" />
-                        New Link
-                    </Button>
-                }
-            />
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>Create New Link</DialogTitle>
-                    <DialogDescription>
-                        Shorten a URL with a custom or random suffix.
-                    </DialogDescription>
-                </DialogHeader>
+        <TooltipProvider>
+            <Dialog open={open} onOpenChange={setOpen}>
+                <Tooltip>
+                    <TooltipTrigger
+                        render={
+                            <DialogTrigger
+                                render={
+                                    <Button>
+                                        <IconPlus data-icon="inline-start" />
+                                        New Link
+                                    </Button>
+                                }
+                            />
+                        }
+                    />
+                    <TooltipContent>Create a new short link</TooltipContent>
+                </Tooltip>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Create New Link</DialogTitle>
+                        <DialogDescription>
+                            Shorten a URL with a custom or random suffix.
+                        </DialogDescription>
+                    </DialogHeader>
 
-                <form
-                    onSubmit={(e) => {
-                        e.preventDefault();
-                        handleSubmit();
-                    }}
-                    className="flex flex-col gap-4"
-                >
-                    <div className="flex flex-col gap-2">
-                        <Label htmlFor="create-url">Destination URL</Label>
-                        <Input
-                            id="create-url"
-                            type="url"
-                            placeholder="https://example.com/very-long-url"
-                            value={url}
-                            onChange={(e) => setUrl(e.target.value)}
-                            disabled={isPending}
-                            required
-                        />
-                    </div>
-
-                    <div className="flex flex-col gap-2">
-                        <Label htmlFor="create-slug">Slug</Label>
-                        <div className="flex gap-2">
+                    <form
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            handleSubmit();
+                        }}
+                        className="flex flex-col gap-4"
+                    >
+                        <div className="flex flex-col gap-2">
+                            <Label htmlFor="create-url">Destination URL</Label>
                             <Input
-                                id="create-slug"
-                                type="text"
-                                placeholder="custom-slug"
-                                value={slug}
-                                onChange={(e) => setSlug(e.target.value)}
+                                id="create-url"
+                                type="url"
+                                placeholder="https://example.com/very-long-url"
+                                value={url}
+                                onChange={(e) => setUrl(e.target.value)}
                                 disabled={isPending}
                                 required
                             />
-                            <Button
-                                type="button"
-                                variant="outline"
-                                size="icon"
-                                onClick={handleRandomize}
-                                disabled={isPending}
-                            >
-                                <IconRefresh />
-                            </Button>
                         </div>
-                    </div>
 
-                    <div className="flex flex-col gap-2">
-                        <Label htmlFor="create-title">
-                            Title{" "}
-                            <span className="text-muted-foreground">
-                                (optional)
-                            </span>
-                        </Label>
-                        <Input
-                            id="create-title"
-                            type="text"
-                            placeholder="My Link"
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
-                            disabled={isPending}
-                        />
-                    </div>
-
-                    {error ? (
-                        <p className="text-destructive text-sm">{error}</p>
-                    ) : null}
-
-                    <DialogFooter>
-                        <Button type="submit" disabled={isPending}>
-                            {isPending ? (
-                                <IconLoader2
-                                    data-icon="inline-start"
-                                    className="animate-spin"
+                        <div className="flex flex-col gap-2">
+                            <Label htmlFor="create-slug">Slug</Label>
+                            <div className="flex gap-2">
+                                <Input
+                                    id="create-slug"
+                                    type="text"
+                                    placeholder="custom-slug"
+                                    value={slug}
+                                    onChange={(e) => setSlug(e.target.value)}
+                                    disabled={isPending}
+                                    required
                                 />
-                            ) : null}
-                            Create Link
-                        </Button>
-                    </DialogFooter>
-                </form>
-            </DialogContent>
-        </Dialog>
+                                <Tooltip>
+                                    <TooltipTrigger
+                                        render={
+                                            <Button
+                                                type="button"
+                                                variant="outline"
+                                                size="icon"
+                                                onClick={handleRandomize}
+                                                disabled={isPending}
+                                            >
+                                                <IconRefresh />
+                                            </Button>
+                                        }
+                                    />
+                                    <TooltipContent>
+                                        Generate random slug
+                                    </TooltipContent>
+                                </Tooltip>
+                            </div>
+                        </div>
+
+                        <div className="flex flex-col gap-2">
+                            <Label htmlFor="create-title">
+                                Title{" "}
+                                <span className="text-muted-foreground">
+                                    (optional)
+                                </span>
+                            </Label>
+                            <Input
+                                id="create-title"
+                                type="text"
+                                placeholder="My Link"
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                                disabled={isPending}
+                            />
+                        </div>
+
+                        {error ? (
+                            <p className="text-destructive text-sm">{error}</p>
+                        ) : null}
+
+                        <DialogFooter>
+                            <Button type="submit" disabled={isPending}>
+                                {isPending ? (
+                                    <IconLoader2
+                                        data-icon="inline-start"
+                                        className="animate-spin"
+                                    />
+                                ) : null}
+                                Create Link
+                            </Button>
+                        </DialogFooter>
+                    </form>
+                </DialogContent>
+            </Dialog>
+        </TooltipProvider>
     );
 }

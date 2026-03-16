@@ -4,6 +4,12 @@ import { IconLink, IconLogout, IconSettings } from "@tabler/icons-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/seperator";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useAuth } from "@/hooks/use-auth";
 
 type HeaderProps = {
@@ -28,26 +34,43 @@ export function Header({ email }: HeaderProps) {
                         {email}
                     </span>
                     <Separator orientation="vertical" className="h-5" />
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        nativeButton={false}
-                        render={
-                            <Link href="/settings">
-                                <IconSettings data-icon="inline-start" />
-                                Settings
-                            </Link>
-                        }
-                    />
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={signOut}
-                        disabled={isSigningOut}
-                    >
-                        <IconLogout data-icon="inline-start" />
-                        Sign out
-                    </Button>
+                    <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger
+                                render={
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        nativeButton={false}
+                                        render={
+                                            <Link href="/settings">
+                                                <IconSettings data-icon="inline-start" />
+                                                Settings
+                                            </Link>
+                                        }
+                                    />
+                                }
+                            />
+                            <TooltipContent>Manage preferences</TooltipContent>
+                        </Tooltip>
+
+                        <Tooltip>
+                            <TooltipTrigger
+                                render={
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={signOut}
+                                        disabled={isSigningOut}
+                                    >
+                                        <IconLogout data-icon="inline-start" />
+                                        Sign out
+                                    </Button>
+                                }
+                            />
+                            <TooltipContent>Log out of session</TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
                 </div>
             </div>
         </header>
