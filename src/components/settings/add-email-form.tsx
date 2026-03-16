@@ -4,14 +4,14 @@ import { IconLoader2, IconPlus } from "@tabler/icons-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useWhitelistedEmails } from "@/hooks/use-whitelisted-emails";
 
 export function AddEmailForm({
-    emails,
+    addEmail,
+    isPending,
 }: {
-    emails: { email: string; created_at: string }[];
+    addEmail: (email: string) => Promise<void>;
+    isPending: boolean;
 }) {
-    const { addEmail, isPending } = useWhitelistedEmails(emails);
     const [newEmail, setNewEmail] = useState("");
 
     const handleSubmit = async (e: React.FormEvent) => {

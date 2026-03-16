@@ -35,7 +35,7 @@ export async function removeWhitelistedEmail(email: string) {
     const supabase = await createClient();
 
     const { error } = await supabase.rpc("remove_whitelisted_email", {
-        p_email: email,
+        p_email: email.toLowerCase(),
     });
 
     if (error) {

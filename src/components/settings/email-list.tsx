@@ -3,16 +3,17 @@
 import { IconTrash } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { useWhitelistedEmails } from "@/hooks/use-whitelisted-emails";
 import { formatDate } from "@/lib/utils";
 
 export function EmailList({
-    initialEmails,
+    emails,
+    removeEmail,
+    isPending,
 }: {
-    initialEmails: { email: string; created_at: string }[];
+    emails: { email: string; created_at: string }[];
+    removeEmail: (email: string) => Promise<void>;
+    isPending: boolean;
 }) {
-    const { emails, removeEmail, isPending } =
-        useWhitelistedEmails(initialEmails);
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {

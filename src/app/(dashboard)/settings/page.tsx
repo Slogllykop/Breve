@@ -3,8 +3,7 @@ import Link from "next/link";
 import { getWhitelistedEmails } from "@/app/(dashboard)/settings/actions";
 import { LoginForm } from "@/components/auth/login-form";
 import { Header } from "@/components/dashboard/header";
-import { AddEmailForm } from "@/components/settings/add-email-form";
-import { EmailList } from "@/components/settings/email-list";
+import { WhitelistManager } from "@/components/settings/whitelist-manager";
 import {
     Card,
     CardContent,
@@ -58,8 +57,7 @@ export default async function SettingsPage() {
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <AddEmailForm emails={emails} />
-                            <EmailList initialEmails={emails} />
+                            <WhitelistManager initialEmails={emails} />
                         </CardContent>
                     </Card>
                 </div>
