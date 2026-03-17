@@ -1,6 +1,16 @@
 import { IconFileUnknown } from "@tabler/icons-react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+
+export const metadata: Metadata = {
+    title: "Page Not Found",
+    description: "The page or link you requested could not be found.",
+    robots: {
+        index: false,
+        follow: true,
+    },
+};
 
 export default function NotFound() {
     return (

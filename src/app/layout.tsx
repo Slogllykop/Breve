@@ -13,8 +13,48 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-    title: "Shorter - URL Shortener",
-    description: "Self-hosted URL shortener built with Next.js",
+    metadataBase: new URL("https://a.isdevs.cv"),
+    title: {
+        default: "Shorter - Premium URL Shortener",
+        template: "%s | Shorter",
+    },
+    description:
+        "A fast, secure, and premium URL shortener for all your links.",
+    keywords: [
+        "url shortener",
+        "link shortener",
+        "shorter",
+        "analytics",
+        "tracking",
+    ],
+    authors: [{ name: "Shorter Team" }],
+    creator: "Shorter Team",
+    publisher: "Shorter Team",
+    robots: {
+        index: true,
+        follow: true,
+    },
+    openGraph: {
+        type: "website",
+        locale: "en_US",
+        url: "/",
+        siteName: "Shorter",
+        title: "Shorter - Premium URL Shortener",
+        description:
+            "A fast, secure, and premium URL shortener for all your links.",
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: "Shorter - Premium URL Shortener",
+        description:
+            "A fast, secure, and premium URL shortener for all your links.",
+        creator: "@shorter",
+    },
+    icons: {
+        icon: "/favicon.ico",
+        shortcut: "/favicon.ico",
+        apple: "/favicon.ico",
+    },
 };
 
 export default function RootLayout({

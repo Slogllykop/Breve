@@ -46,3 +46,4 @@ next-env.d.ts
 !.env.example
 .temp
 skills-lock.json
+*review*.md

@@ -1,8 +1,16 @@
+import type { Metadata } from "next";
 import { headers } from "next/headers";
+import Script from "next/script";
 import { LoginForm } from "@/components/auth/login-form";
 import { DashboardView } from "@/components/dashboard/dashboard-view";
 import { createClient } from "@/lib/supabase/server";
 import { getLinks } from "./actions";
+
+export const metadata: Metadata = {
+    title: "Dashboard - Shorter",
+    description:
+        "Manage your links and view detailed analytics on your Shorter dashboard.",
+};
 
 export default async function DashboardPage(props: {
     searchParams: Promise<{ error?: string }>;
@@ -32,11 +40,37 @@ export default async function DashboardPage(props: {
     const protocol = headersList.get("x-forwarded-proto") ?? "http";
     const baseUrl = `${protocol}://${host}`;
 
+    const jsonLd = {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        name: "Shorter",
+        description: "A premium URL shortener with detailed analytics.",
+        applicationCategory: "UtilitiesApplication",
+        operatingSystem: "Web",
+        author: {
+            "@type": "Organization",
+            name: "Shorter Team",
+        },
+        offers: {
+            "@type": "Offer",
+            price: "0",
+            priceCurrency: "USD",
+        },
+    };
+
     return (
-        <DashboardView
-            email={user.email ?? ""}
-            links={links}
-            baseUrl={baseUrl}
-        />
+        <>
+            <Script
+                id="structured-data"
+                type="application/ld+json"
+                // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data is safe to inject this way
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
+            <DashboardView
+                email={user.email ?? ""}
+                links={links}
+                baseUrl={baseUrl}
+            />
+        </>
     );
 }
