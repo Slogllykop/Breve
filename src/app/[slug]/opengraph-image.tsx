@@ -1,5 +1,4 @@
 import { ImageResponse } from "next/og";
-import { getLinkBySlug } from "./actions";
 
 export const runtime = "edge";
 
@@ -10,13 +9,8 @@ export const size = {
 
 export const contentType = "image/png";
 
-export default async function Image({ params }: { params: { slug: string } }) {
-    const { slug } = params;
-    const { data: link } = await getLinkBySlug(slug);
-
-    const title = link?.original_url
-        ? `Redirecting to ${link.original_url}`
-        : "Link Not Found";
+export default async function Image() {
+    const title = "Secure Redirect";
 
     return new ImageResponse(
         <div

@@ -18,8 +18,9 @@ export async function generateMetadata({
         };
     }
 
-    const title = `Redirecting to ${link.original_url} | Breve`;
-    const description = `You are being redirected to ${link.original_url} via Breve, the premium URL shortener.`;
+    const title = "Secure Redirect | Breve";
+    const description =
+        "You are being redirected securely via Breve, the premium URL shortener.";
 
     return {
         title,

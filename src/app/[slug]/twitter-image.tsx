@@ -9,9 +9,7 @@ export const size = {
 
 export const contentType = "image/png";
 
-export default async function Image({ params }: { params: { slug: string } }) {
-    const { slug } = params;
-
+export default async function Image() {
     return new ImageResponse(
         <div
             style={{
@@ -57,7 +55,7 @@ export default async function Image({ params }: { params: { slug: string } }) {
                     whiteSpace: "nowrap",
                 }}
             >
-                Redirecting to {slug}...
+                Secure Redirect...
             </div>
         </div>,
         {
