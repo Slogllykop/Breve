@@ -1,5 +1,5 @@
-import { IconFileUnknown } from "@tabler/icons-react";
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
@@ -15,8 +15,13 @@ export const metadata: Metadata = {
 export default function NotFound() {
     return (
         <div className="flex min-h-screen w-full flex-col items-center justify-center gap-6 bg-black text-center">
-            <div className="flex h-20 w-20 items-center justify-center rounded-full border border-zinc-800 bg-zinc-900">
-                <IconFileUnknown className="h-10 w-10 text-zinc-400" />
+            <div className="flex h-24 w-24 items-center justify-center rounded-2xl border border-zinc-800 bg-zinc-900 shadow-xl">
+                <Image
+                    src="/logo.png"
+                    alt="Breve Logo"
+                    width={48}
+                    height={48}
+                />
             </div>
             <div className="space-y-2">
                 <h2 className="font-bold text-3xl text-white tracking-tight">

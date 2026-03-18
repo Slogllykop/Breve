@@ -7,9 +7,9 @@ import { createClient } from "@/lib/supabase/server";
 import { getLinks } from "./actions";
 
 export const metadata: Metadata = {
-    title: "Dashboard - Shorter",
+    title: "Dashboard - Breve",
     description:
-        "Manage your links and view detailed analytics on your Shorter dashboard.",
+        "Manage your links and view detailed analytics on your Breve dashboard.",
 };
 
 export default async function DashboardPage(props: {
@@ -43,13 +43,13 @@ export default async function DashboardPage(props: {
     const jsonLd = {
         "@context": "https://schema.org",
         "@type": "SoftwareApplication",
-        name: "Shorter",
+        name: "Breve",
         description: "A premium URL shortener with detailed analytics.",
         applicationCategory: "UtilitiesApplication",
         operatingSystem: "Web",
         author: {
             "@type": "Organization",
-            name: "Shorter Team",
+            name: "Breve Team",
         },
         offers: {
             "@type": "Offer",

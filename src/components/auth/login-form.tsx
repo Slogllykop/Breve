@@ -1,6 +1,7 @@
 "use client";
 
 import { IconArrowLeft, IconLoader2, IconMail } from "@tabler/icons-react";
+import Image from "next/image";
 import { useCallback, useState, useTransition } from "react";
 import { sendOtp } from "@/app/(dashboard)/actions";
 import { Button } from "@/components/ui/button";
@@ -44,10 +45,19 @@ export function LoginForm({ initialError }: LoginFormProps) {
     return (
         <div className="flex min-h-screen items-center justify-center">
             <div className="flex w-full max-w-sm flex-col gap-6 px-4">
-                <div className="flex flex-col gap-2 text-center">
-                    <h1 className="font-semibold text-2xl tracking-tight">
-                        Shorter
-                    </h1>
+                <div className="flex flex-col items-center gap-4 text-center">
+                    <Image
+                        src="/logo.png"
+                        alt="Breve Logo"
+                        width={48}
+                        height={48}
+                        className="rounded-lg shadow-lg"
+                    />
+                    <div className="flex flex-col gap-1">
+                        <h1 className="font-semibold text-2xl tracking-tight">
+                            Breve
+                        </h1>
+                    </div>
                     <p className="text-muted-foreground text-sm">
                         {step === "email"
                             ? "Enter your email to sign in"

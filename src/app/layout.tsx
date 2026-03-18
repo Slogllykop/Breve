@@ -15,21 +15,21 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
     metadataBase: new URL("https://a.isdevs.cv"),
     title: {
-        default: "Shorter",
-        template: "%s | Shorter",
+        default: "Breve",
+        template: "%s | Breve",
     },
     description:
         "A fast, secure, premium and self-hosted URL shortener for all your links.",
     keywords: [
         "url shortener",
         "link shortener",
-        "shorter",
+        "breve",
         "analytics",
         "tracking",
     ],
-    authors: [{ name: "Shorter Team" }],
-    creator: "Shorter Team",
-    publisher: "Shorter Team",
+    authors: [{ name: "Breve Team" }],
+    creator: "Breve Team",
+    publisher: "Breve Team",
     robots: {
         index: true,
         follow: true,
@@ -38,22 +38,22 @@ export const metadata: Metadata = {
         type: "website",
         locale: "en_US",
         url: "/",
-        siteName: "Shorter",
-        title: "Shorter",
+        siteName: "Breve",
+        title: "Breve",
         description:
             "A fast, secure, premium and self-hosted URL shortener for all your links.",
     },
     twitter: {
         card: "summary_large_image",
-        title: "Shorter",
+        title: "Breve",
         description:
             "A fast, secure, premium and self-hosted URL shortener for all your links.",
-        creator: "@shorter",
+        creator: "@breve",
     },
     icons: {
-        icon: "/favicon.ico",
-        shortcut: "/favicon.ico",
-        apple: "/favicon.ico",
+        icon: "/logo.png",
+        shortcut: "/logo.png",
+        apple: "/logo.png",
     },
 };
 

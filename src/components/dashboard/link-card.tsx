@@ -7,10 +7,10 @@ import {
     IconCopy,
     IconDownload,
     IconExternalLink,
-    IconLink,
     IconPencil,
     IconTrash,
 } from "@tabler/icons-react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import type { LinkData } from "@/app/(dashboard)/actions";
@@ -127,9 +127,12 @@ export function LinkCard({ link, baseUrl }: LinkCardProps) {
 
                             {/* Short URL */}
                             <div className="flex items-center gap-1.5 text-emerald-400/80 text-sm">
-                                <IconLink
-                                    aria-hidden="true"
-                                    className="size-3.5 shrink-0"
+                                <Image
+                                    src="/logo.png"
+                                    alt=""
+                                    width={14}
+                                    height={14}
+                                    className="shrink-0 rounded-xs opacity-80"
                                 />
                                 <span className="truncate">{shortUrl}</span>
                             </div>

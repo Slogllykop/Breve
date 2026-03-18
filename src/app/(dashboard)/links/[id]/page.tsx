@@ -1,4 +1,5 @@
 import { IconArrowLeft } from "@tabler/icons-react";
+import type { Metadata } from "next";
 import { headers } from "next/headers";
 import Link from "next/link";
 import { AnalyticsView } from "@/components/analytics/analytics-view";
@@ -6,6 +7,48 @@ import { Header } from "@/components/dashboard/header";
 import { Button } from "@/components/ui/button";
 import { getCachedClickCount } from "@/lib/redis/cache";
 import { createClient } from "@/lib/supabase/server";
+
+export async function generateMetadata({
+    params,
+}: {
+    params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+    const { id } = await params;
+    const linkId = parseInt(id, 10);
+
+    if (Number.isNaN(linkId)) {
+        return { title: "Invalid Link | Breve" };
+    }
+
+    const supabase = await createClient();
+    const { data: links } = await supabase
+        .from("links")
+        .select("title, original_url")
+        .eq("id", linkId)
+        .limit(1);
+
+    if (!links || links.length === 0) {
+        return { title: "Link Not Found | Breve" };
+    }
+
+    const link = links[0];
+    const title = `${link.title} Analytics | Breve`;
+    const description = `View detailed analytics and tracking information for "${link.title}" (${link.original_url}) on Breve.`;
+
+    return {
+        title,
+        description,
+        openGraph: {
+            title,
+            description,
+        },
+        twitter: {
+            card: "summary_large_image",
+            title,
+            description,
+        },
+    };
+}
 
 export default async function AnalyticsPage({
     params,

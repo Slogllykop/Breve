@@ -1,8 +1,8 @@
 import { ImageResponse } from "next/og";
+import { createClient } from "@/lib/supabase/server";
 
 export const runtime = "edge";
 
-export const alt = "Breve - Premium URL Shortener";
 export const size = {
     width: 1200,
     height: 630,
@@ -10,7 +10,23 @@ export const size = {
 
 export const contentType = "image/png";
 
-export default async function Image() {
+export default async function Image({ params }: { params: { id: string } }) {
+    const { id } = params;
+    const linkId = parseInt(id, 10);
+
+    let title = "Analytics Dashboard";
+    if (!Number.isNaN(linkId)) {
+        const supabase = await createClient();
+        const { data } = await supabase
+            .from("links")
+            .select("title")
+            .eq("id", linkId)
+            .single();
+        if (data?.title) {
+            title = `${data.title} Analytics`;
+        }
+    }
+
     return new ImageResponse(
         <div
             style={{
@@ -35,7 +51,7 @@ export default async function Image() {
             >
                 <span
                     style={{
-                        fontSize: 128,
+                        fontSize: 84,
                         fontWeight: "bold",
                         color: "white",
                         letterSpacing: "-0.05em",
@@ -47,12 +63,16 @@ export default async function Image() {
             <div
                 style={{
                     marginTop: 40,
-                    fontSize: 32,
+                    fontSize: 48,
                     color: "white",
-                    opacity: 0.8,
+                    textAlign: "center",
+                    maxWidth: "80%",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
                 }}
             >
-                Simple and Self-hosted URL Shortener
+                {title}
             </div>
         </div>,
         {

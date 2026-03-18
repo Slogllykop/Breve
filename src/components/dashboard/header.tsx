@@ -1,6 +1,7 @@
 "use client";
 
-import { IconLink, IconLogout, IconSettings } from "@tabler/icons-react";
+import { IconLogout, IconSettings } from "@tabler/icons-react";
+import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/seperator";
@@ -23,9 +24,15 @@ export function Header({ email }: HeaderProps) {
         <header className="border-border/40 border-b">
             <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
                 <div className="flex items-center gap-3">
-                    <IconLink aria-hidden="true" className="size-5" />
+                    <Image
+                        src="/logo.png"
+                        alt="Breve Logo"
+                        width={30}
+                        height={30}
+                        className="rounded-sm"
+                    />
                     <h1 className="font-semibold text-lg tracking-tight">
-                        Shorter
+                        Breve
                     </h1>
                 </div>
 

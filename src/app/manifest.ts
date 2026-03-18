@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
     return {
-        name: "Shorter URL Shortener",
-        short_name: "Shorter",
+        name: "Breve URL Shortener",
+        short_name: "Breve",
         description:
             "A fast, secure, and premium URL shortener for all your links.",
         start_url: "/",
@@ -12,9 +12,9 @@ export default function manifest(): MetadataRoute.Manifest {
         theme_color: "#000000",
         icons: [
             {
-                src: "/favicon.ico",
-                sizes: "any",
-                type: "image/x-icon",
+                src: "/logo.png",
+                sizes: "512x512",
+                type: "image/png",
             },
         ],
     };

@@ -1,4 +1,41 @@
+import type { Metadata } from "next";
 import { RedirectClient } from "@/components/redirect/redirect-client";
+import { getLinkBySlug } from "./actions";
+
+export async function generateMetadata({
+    params,
+}: {
+    params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+    const { slug } = await params;
+    const { data: link } = await getLinkBySlug(slug);
+
+    if (!link) {
+        return {
+            title: "Link Not Found | Breve",
+            description:
+                "The link you are looking for does not exist or has been removed.",
+        };
+    }
+
+    const title = `Redirecting to ${link.original_url} | Breve`;
+    const description = `You are being redirected to ${link.original_url} via Breve, the premium URL shortener.`;
+
+    return {
+        title,
+        description,
+        openGraph: {
+            title,
+            description,
+            type: "website",
+        },
+        twitter: {
+            card: "summary_large_image",
+            title,
+            description,
+        },
+    };
+}
 
 export default async function RedirectPage({
     params,
