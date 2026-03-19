@@ -107,6 +107,7 @@ Open `.env.local` in your editor and configure the following variables:
 *   `UPSTASH_REDIS_REST_TOKEN`: The secure access token for your Upstash database.
 *   `NEXT_PUBLIC_SUPABASE_URL`: The unique URL for your Supabase project.
 *   `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY`: Your Supabase anonymous key (safe for client-side usage).
+*   `NEXT_PUBLIC_SITE_URL`: The base URL of your application (e.g., `https://your-domain.com`), used for SEO, robots.txt, and sitemap generation.
 
 ### 4. Database Setup
 

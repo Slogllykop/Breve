@@ -2,6 +2,8 @@
  * Shared constants across the Breve application.
  */
 
+export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL as string;
+
 export const ANALYTICS_PERIODS = [
     { value: "7d", label: "7D" },
     { value: "30d", label: "30D" },
