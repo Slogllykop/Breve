@@ -1,6 +1,6 @@
 "use client";
 
-import { Cell, Pie, PieChart } from "recharts";
+import { Pie, PieChart, Sector } from "recharts";
 import type { DeviceData } from "@/app/(dashboard)/links/[id]/actions";
 import {
     ChartContainer,
@@ -70,12 +70,12 @@ export function DeviceChart({ data }: { data: DeviceData[] }) {
                     dataKey="value"
                     nameKey="name"
                     stroke="none"
-                >
-                    {chartData.map((entry, index) => (
-                        // biome-ignore lint/suspicious/noArrayIndexKey: Static legend order is acceptable here.
-                        <Cell key={`device-slice-${index}`} fill={entry.fill} />
-                    ))}
-                </Pie>
+                    // biome-ignore lint/suspicious/noExplicitAny: Recharts custom shape props receive dynamic SVG attributes.
+                    shape={(props: any) => {
+                        const { payload, ...rest } = props;
+                        return <Sector {...rest} fill={payload.fill} />;
+                    }}
+                />
                 <ChartLegend
                     verticalAlign="bottom"
                     content={<ChartLegendContent nameKey="name" />}

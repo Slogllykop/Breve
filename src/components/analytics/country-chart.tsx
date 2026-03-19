@@ -4,8 +4,8 @@ import {
     Bar,
     BarChart,
     CartesianGrid,
-    Cell,
     LabelList,
+    Rectangle,
     XAxis,
     YAxis,
 } from "recharts";
@@ -86,13 +86,20 @@ export function CountryChart({ data }: { data: CountryData[] }) {
                         />
                     }
                 />
-                <Bar dataKey="clicks" radius={[0, 4, 4, 0]} barSize={20}>
-                    {sortedData.map((entry, index) => (
-                        <Cell
-                            key={`bar-${entry.country}`}
-                            fill={BAR_COLORS[index % BAR_COLORS.length]}
-                        />
-                    ))}
+                <Bar
+                    dataKey="clicks"
+                    radius={[0, 4, 4, 0]}
+                    barSize={20}
+                    // biome-ignore lint/suspicious/noExplicitAny: Recharts custom shape props receive dynamic SVG attributes.
+                    shape={(props: any) => {
+                        return (
+                            <Rectangle
+                                {...props}
+                                fill={BAR_COLORS[props.index % BAR_COLORS.length]}
+                            />
+                        );
+                    }}
+                >
                     <LabelList
                         dataKey="clicks"
                         position="right"

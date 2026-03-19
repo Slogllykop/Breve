@@ -15,7 +15,7 @@ export function AddEmailForm({
 }) {
     const [newEmail, setNewEmail] = useState("");
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.SubmitEvent) => {
         e.preventDefault();
         if (!newEmail || !newEmail.includes("@")) return;
 
