@@ -95,7 +95,9 @@ export function CountryChart({ data }: { data: CountryData[] }) {
                         return (
                             <Rectangle
                                 {...props}
-                                fill={BAR_COLORS[props.index % BAR_COLORS.length]}
+                                fill={
+                                    BAR_COLORS[props.index % BAR_COLORS.length]
+                                }
                             />
                         );
                     }}

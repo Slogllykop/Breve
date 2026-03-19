@@ -6,6 +6,7 @@ import { AnalyticsView } from "@/components/analytics/analytics-view";
 import { Header } from "@/components/dashboard/header";
 import { Button } from "@/components/ui/button";
 import { getCachedClickCount } from "@/lib/redis/cache";
+import { getLink } from "@/lib/supabase/links";
 import { createClient } from "@/lib/supabase/server";
 
 export async function generateMetadata({
@@ -20,18 +21,11 @@ export async function generateMetadata({
         return { title: "Invalid Link" };
     }
 
-    const supabase = await createClient();
-    const { data: links } = await supabase
-        .from("links")
-        .select("title, original_url")
-        .eq("id", linkId)
-        .limit(1);
+    const link = await getLink(linkId);
 
-    if (!links || links.length === 0) {
+    if (!link) {
         return { title: "Link Not Found" };
     }
-
-    const link = links[0];
     const title = `${link.title} Analytics`;
     const description = `View detailed analytics and tracking information for "${link.title}" (${link.original_url}) on Breve.`;
 
@@ -69,14 +63,9 @@ export default async function AnalyticsPage({
 
     if (!user) return null; // Handled by root layout auth check
 
-    // Fetch link details
-    const { data: links, error } = await supabase
-        .from("links")
-        .select("*")
-        .eq("id", linkId)
-        .limit(1);
+    const link = await getLink(linkId);
 
-    if (error || !links || links.length === 0) {
+    if (!link) {
         return (
             <div className="flex min-h-dvh flex-col items-center justify-center gap-4">
                 <p className="text-muted-foreground">Link not found.</p>
@@ -93,8 +82,6 @@ export default async function AnalyticsPage({
             </div>
         );
     }
-
-    const link = links[0];
     const totalClicks = Math.max(
         Number(link.click_count ?? 0),
         (await getCachedClickCount(linkId)) ?? 0,
