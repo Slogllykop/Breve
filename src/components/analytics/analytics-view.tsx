@@ -71,7 +71,11 @@ export function AnalyticsView({
                 />
 
                 {/* Charts */}
-                <AnalyticsCharts data={data} isLoading={isLoading} />
+                <AnalyticsCharts
+                    data={data}
+                    isLoading={isLoading}
+                    period={period}
+                />
             </div>
 
             <EditLinkDialog

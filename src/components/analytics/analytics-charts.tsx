@@ -9,6 +9,7 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import type { Period } from "@/hooks/use-analytics";
 import { ClickChart } from "./click-chart";
 import { CountryChart } from "./country-chart";
 import { DeviceChart } from "./device-chart";
@@ -16,10 +17,15 @@ import { DeviceChart } from "./device-chart";
 type AnalyticsChartsProps = {
     data: LinkAnalytics | null;
     isLoading: boolean;
+    period?: Period;
 };
 
 /** Grid of analytics charts: clicks over time, device mix, and top locations. */
-export function AnalyticsCharts({ data, isLoading }: AnalyticsChartsProps) {
+export function AnalyticsCharts({
+    data,
+    isLoading,
+    period,
+}: AnalyticsChartsProps) {
     return (
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             <Card className="col-span-1 border border-white/10 bg-white/4 lg:col-span-2">
@@ -33,7 +39,10 @@ export function AnalyticsCharts({ data, isLoading }: AnalyticsChartsProps) {
                     {isLoading ? (
                         <Skeleton className="h-[300px] w-full bg-white/10" />
                     ) : (
-                        <ClickChart data={data?.timeSeries ?? []} />
+                        <ClickChart
+                            data={data?.timeSeries ?? []}
+                            period={period}
+                        />
                     )}
                 </CardContent>
             </Card>

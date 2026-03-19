@@ -15,7 +15,13 @@ import {
     ChartTooltipContent,
 } from "@/components/ui/chart";
 
-export function ClickChart({ data }: { data: TimeSeriesData[] }) {
+export function ClickChart({
+    data,
+    period,
+}: {
+    data: TimeSeriesData[];
+    period?: string;
+}) {
     if (!data || data.length === 0) {
         return (
             <div className="flex h-[320px] w-full items-center justify-center text-muted-foreground text-sm">
@@ -50,7 +56,15 @@ export function ClickChart({ data }: { data: TimeSeriesData[] }) {
                     axisLine={false}
                     tickFormatter={(value) => {
                         const date = new Date(value);
+                        if (period === "all") {
+                            return date.toLocaleDateString("en-US", {
+                                timeZone: "UTC",
+                                month: "short",
+                                year: "numeric",
+                            });
+                        }
                         return date.toLocaleDateString("en-US", {
+                            timeZone: "UTC",
                             month: "short",
                             day: "numeric",
                         });
@@ -73,13 +87,22 @@ export function ClickChart({ data }: { data: TimeSeriesData[] }) {
                     cursor={false}
                     content={
                         <ChartTooltipContent
-                            labelFormatter={(label: string) =>
-                                new Date(label).toLocaleDateString("en-US", {
+                            labelFormatter={(label: string) => {
+                                const date = new Date(label);
+                                if (period === "all") {
+                                    return date.toLocaleDateString("en-US", {
+                                        timeZone: "UTC",
+                                        month: "long",
+                                        year: "numeric",
+                                    });
+                                }
+                                return date.toLocaleDateString("en-US", {
+                                    timeZone: "UTC",
                                     weekday: "short",
                                     month: "short",
                                     day: "numeric",
-                                })
-                            }
+                                });
+                            }}
                         />
                     }
                 />
