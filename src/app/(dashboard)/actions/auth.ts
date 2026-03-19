@@ -1,7 +1,13 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
+
+const sendOtpSchema = z.object({
+    email: z.email("Invalid email address"),
+    origin: z.url("Invalid origin URL"),
+});
 
 export type AuthResult = {
     success: boolean;
@@ -16,11 +22,19 @@ export async function sendOtp(
     email: string,
     origin: string,
 ): Promise<AuthResult> {
+    const parsed = sendOtpSchema.safeParse({ email, origin });
+    if (!parsed.success) {
+        return { success: false, error: parsed.error.issues[0].message };
+    }
+
+    const validEmail = parsed.data.email;
+    const validOrigin = parsed.data.origin;
+
     const supabase = await createClient();
 
     const { data: isWhitelisted, error: checkError } = await supabase.rpc(
         "check_email_whitelisted",
-        { p_email: email },
+        { p_email: validEmail },
     );
 
     if (checkError) {
@@ -38,10 +52,10 @@ export async function sendOtp(
     }
 
     const { error } = await supabase.auth.signInWithOtp({
-        email,
+        email: validEmail,
         options: {
             shouldCreateUser: true,
-            emailRedirectTo: `${origin}/auth/confirm`,
+            emailRedirectTo: `${validOrigin}/auth/confirm`,
         },
     });
 

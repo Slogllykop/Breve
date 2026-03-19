@@ -1,8 +1,28 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
 import { cacheLink, invalidateLink } from "@/lib/redis/cache";
 import { createClient } from "@/lib/supabase/server";
+
+const createLinkSchema = z.object({
+    slug: z.string().min(1, "Slug is required").max(100, "Slug is too long"),
+    originalUrl: z.url("Invalid original URL"),
+    title: z.string().nullable(),
+});
+
+const updateLinkSchema = z.object({
+    id: z.number().positive("Invalid link ID"),
+    slug: z.string().min(1, "Slug is required").max(100, "Slug is too long"),
+    originalUrl: z.url("Invalid original URL"),
+    title: z.string().nullable(),
+    oldSlug: z.string().min(1, "Old slug is required"),
+});
+
+const deleteLinkSchema = z.object({
+    id: z.number().positive("Invalid link ID"),
+    slug: z.string().min(1, "Slug is required"),
+});
 
 export type LinkData = {
     id: number;
@@ -39,11 +59,17 @@ export async function createLink(
     originalUrl: string,
     title: string | null,
 ): Promise<LinkResult> {
+    const parsed = createLinkSchema.safeParse({ slug, originalUrl, title });
+    if (!parsed.success) {
+        return { success: false, error: parsed.error.issues[0].message };
+    }
+    const validData = parsed.data;
+
     const supabase = await createClient();
     const { data, error } = await supabase.rpc("create_link", {
-        p_slug: slug,
-        p_original_url: originalUrl,
-        p_title: title,
+        p_slug: validData.slug,
+        p_original_url: validData.originalUrl,
+        p_title: validData.title,
     });
 
     if (error) {
@@ -58,7 +84,7 @@ export async function createLink(
 
     const link = data?.[0];
     if (link) {
-        await cacheLink(slug, originalUrl, link.id);
+        await cacheLink(validData.slug, validData.originalUrl, link.id);
     }
 
     revalidatePath("/");
@@ -73,18 +99,30 @@ export async function updateLink(
     title: string | null,
     oldSlug: string,
 ): Promise<LinkResult> {
+    const parsed = updateLinkSchema.safeParse({
+        id,
+        slug,
+        originalUrl,
+        title,
+        oldSlug,
+    });
+    if (!parsed.success) {
+        return { success: false, error: parsed.error.issues[0].message };
+    }
+    const validData = parsed.data;
+
     const supabase = await createClient();
 
     // Invalidate old slug from cache if slug changed
-    if (oldSlug !== slug) {
-        await invalidateLink(oldSlug);
+    if (validData.oldSlug !== validData.slug) {
+        await invalidateLink(validData.oldSlug);
     }
 
     const { error } = await supabase.rpc("update_link", {
-        p_id: id,
-        p_slug: slug,
-        p_original_url: originalUrl,
-        p_title: title,
+        p_id: validData.id,
+        p_slug: validData.slug,
+        p_original_url: validData.originalUrl,
+        p_title: validData.title,
     });
 
     if (error) {
@@ -98,7 +136,7 @@ export async function updateLink(
     }
 
     // Update cache with new slug
-    await cacheLink(slug, originalUrl, id);
+    await cacheLink(validData.slug, validData.originalUrl, validData.id);
 
     revalidatePath("/");
     return { success: true };
@@ -109,11 +147,17 @@ export async function deleteLink(
     id: number,
     slug: string,
 ): Promise<LinkResult> {
+    const parsed = deleteLinkSchema.safeParse({ id, slug });
+    if (!parsed.success) {
+        return { success: false, error: parsed.error.issues[0].message };
+    }
+    const validData = parsed.data;
+
     const supabase = await createClient();
 
-    await invalidateLink(slug);
+    await invalidateLink(validData.slug);
 
-    const { error } = await supabase.rpc("delete_link", { p_id: id });
+    const { error } = await supabase.rpc("delete_link", { p_id: validData.id });
 
     if (error) {
         return { success: false, error: error.message };
